@@ -1,0 +1,248 @@
+═══════════════════════════════════════════════════════════════
+  📝 COMO USAR O EDITOR INLINE WYSIWYG
+═══════════════════════════════════════════════════════════════
+
+🎯 INÍCIO RÁPIDO:
+
+1. Abra o arquivo "editor.html" no seu navegador
+2. Você verá o editor com todos os slides visíveis
+3. Clique em qualquer slide para editar (texto fica azul rosa)
+4. Pressione Enter para criar um novo slide automaticamente
+5. Clique em "▶ Play" para entrar no modo apresentação
+6. Use "Editar" ou tecla E para voltar ao editor
+
+───────────────────────────────────────────────────────────────
+
+✏️ EDITANDO SLIDES:
+
+• Clique em um slide → texto fica AZUL (modo edição)
+• Digite seu conteúdo normalmente
+• Clique fora ou vá para outro slide → texto volta ao PRETO
+• Enter no final do slide → cria novo slide abaixo
+• Apagar todo conteúdo → slide é deletado automaticamente (0.8s)
+• Backspace em slide vazio → deleta o slide também
+• Hover sobre slide → mostra botão 🗑️ (deletar)
+• Slide único vazio NÃO pode ser deletado
+
+───────────────────────────────────────────────────────────────
+
+🖼️ ADICIONANDO IMAGENS:
+
+Método 1 - Botão no toolbar:
+  1. Clique no slide que quer adicionar imagem
+  2. Clique em "🖼️ Adicionar Imagem" no toolbar
+  3. Escolha: Upload de arquivo OU URL externa
+  4. Confirme
+
+Método 2 - Botão no slide:
+  • Passe o mouse sobre qualquer slide
+  • (Funcionalidade em desenvolvimento)
+
+Remover imagem:
+  • Clique no "×" no canto da imagem
+
+───────────────────────────────────────────────────────────────
+
+▶️ MODO APRESENTAÇÃO (PLAY):
+
+• Clique no botão "▶ Play" no toolbar superior
+• Entra em modo fullscreen com visual centralizado
+• Slides aparecem progressivamente conforme você avança
+• Slides anteriores ficam visíveis acima em cor mais clara
+• Efeito typewriter letra por letra (aguarda você iniciar)
+• Imagens aparecem fixas no lado direito (se houver)
+• Botão "Editar" aparece com movimento amplo e some quando mouse para
+• Pressione tecla "E" para mostrar/esconder botão Editar
+• Clique em "Editar" para voltar ao modo edição
+
+───────────────────────────────────────────────────────────────
+
+💾 SALVAMENTO AUTOMÁTICO:
+
+• Tudo é salvo automaticamente após 1 segundo
+• Indicador no canto superior direito:
+  - "Salvando..." → está salvando
+  - "Salvo" → tudo certo!
+• Dados salvos no navegador (localStorage)
+
+───────────────────────────────────────────────────────────────
+
+🎨 VISUAL:
+
+• Texto normal (não editando): PRETO
+• Texto em edição (focused): ROSA (cor accent personalizável)
+• Background ao passar mouse: CINZA CLARO
+• Fonte: IBM Plex Mono (mesma da apresentação)
+• Layout vertical no editor (scroll para ver todos os slides)
+• Numeração automática ao lado de cada slide (oculta no modo apresentação)
+• Modo apresentação: fade nos slides + cursor piscando sempre visível
+• Cursor typewriter permanece após terminar a animação
+
+───────────────────────────────────────────────────────────────
+
+⌨️ ATALHOS DE TECLADO NO EDITOR:
+
+Enter      → Criar novo slide abaixo e mover cursor automaticamente
+Backspace  → Deletar slide vazio (e voltar ao anterior)
+Click      → Editar slide (texto fica rosa destacado)
+
+⌨️ ATALHOS NA APRESENTAÇÃO:
+
+→ ou ↓  → Avançar (inicia digitação se esperando, senão avança)
+← ou ↑  → Voltar para slide anterior
+ESPAÇO  → Iniciar digitação OU pular animação typewriter
+R       → Reiniciar apresentação do início (volta ao primeiro slide)
+E       → Mostrar/esconder botão "Editar"
+
+───────────────────────────────────────────────────────────────
+
+📊 CONTADOR DE SLIDES:
+
+• Canto superior direito mostra: "3 / 10"
+• Número da esquerda = slide atual (quando clicado)
+• Número da direita = total de slides
+
+───────────────────────────────────────────────────────────────
+
+💡 DICAS:
+
+✓ Modo apresentação fullscreen com visual centralizado
+✓ Efeito typewriter letra por letra no slide atual
+✓ Cursor piscando durante digitação, fica inativo após terminar
+✓ Slides anteriores permanecem visíveis acima em cor mais clara
+✓ Slides futuros aparecem apenas quando você avança
+✓ Pressione R para reiniciar do primeiro slide a qualquer momento
+✓ Não precisa salvar manualmente, é automático!
+✓ Texto rosa = você está editando (no modo editor)
+✓ Enter automaticamente move o cursor para o novo slide
+✓ Imagens aparecem fixas no lado direito durante apresentação
+✓ Múltiplas imagens por slide (avança com seta)
+✓ Sempre tenha pelo menos 1 slide (não pode deletar o único)
+✓ Slides vazios são deletados automaticamente após 0.8s
+✓ Botão "Editar" requer MUITO movimento do mouse (~600px)
+✓ Botão "Editar" desaparece 0.1s após mouse parar (ultra rápido)
+✓ Pressione E para mostrar/esconder botão durante apresentação
+✓ Movimento pequeno/médio do mouse não mostra o botão (intencional)
+✓ Personalize cores no botão "Editar cores"
+
+───────────────────────────────────────────────────────────────
+
+🔧 TIPOS DE IMAGEM SUPORTADOS:
+
+Upload local:
+  • PNG, JPG, JPEG, GIF, WebP
+  • Convertido para base64 (fica no navegador)
+  • Atenção: imagens grandes ocupam mais espaço
+
+URL externa:
+  • Qualquer URL válida de imagem
+  • Deve começar com http:// ou https://
+  • Não fica armazenada localmente
+
+───────────────────────────────────────────────────────────────
+
+📂 ARQUIVOS:
+
+• editor.html  → Editor + Apresentação unificados (use este!)
+• index.html   → Apresentação standalone (opcional, mantido para compatibilidade)
+• README.md    → Documentação completa
+• COMO-USAR.txt → Este arquivo!
+• *.png        → Imagens de exemplo
+
+───────────────────────────────────────────────────────────────
+
+⚠️ IMPORTANTE:
+
+• Os dados são salvos apenas no seu navegador
+• Cada navegador tem seu próprio localStorage
+• Se limpar dados do navegador, perde o conteúdo
+• Para backup: copie e cole o texto em outro lugar
+• Para compartilhar: copie os slides ou use o mesmo navegador
+
+───────────────────────────────────────────────────────────────
+
+❓ PROBLEMAS COMUNS:
+
+P: Texto não fica azul quando clico
+R: Certifique-se de clicar dentro da área do texto do slide
+
+P: Enter não cria novo slide
+R: Verifique se você está com o cursor dentro de um slide
+
+P: Play não funciona
+R: O modo apresentação agora é integrado! Se clicar em Play e nada
+   acontecer, verifique o console do navegador (F12) para erros
+
+P: Imagens não aparecem
+R: Para URLs externas, verifique se a URL está correta
+   Para upload, verifique se o arquivo é uma imagem válida
+
+P: Perdi meu conteúdo
+R: Dados ficam no localStorage do navegador. Se limpou os dados
+   ou mudou de navegador, precisa criar novamente
+
+P: Não consigo deletar um slide
+R: Você precisa ter pelo menos 1 slide. Se for o único, não pode
+   deletar. Crie outro slide primeiro.
+
+P: Como voltar do modo apresentação para o editor?
+R: Mova o mouse para aparecer o botão "Editar" no canto superior
+   direito, ou pressione a tecla E para mostrar/esconder o botão.
+   Clique nele para voltar ao editor completo.
+
+P: O botão "Editar" sumiu durante a apresentação
+R: É normal! Ele aparece automaticamente quando você move o mouse
+   e desaparece após 3 segundos. Pressione E para forçar aparecer/
+   esconder.
+
+P: Posso ver todos os slides na apresentação antes de avançar?
+R: Não no modo apresentação. Os slides aparecem progressivamente 
+   conforme você avança. Para ver todos, volte ao modo editor clicando
+   em "Editar".
+
+P: Como voltar ao início da apresentação rapidamente?
+R: Pressione a tecla R durante a apresentação para reiniciar do
+   primeiro slide instantaneamente.
+
+───────────────────────────────────────────────────────────────
+
+🚀 FLUXO COMPLETO DE USO:
+
+1. Abrir editor.html
+2. Ver slides visíveis verticalmente com numeração
+3. Clicar no slide (texto → rosa)
+4. Digitar conteúdo
+5. Enter → novo slide (cursor move automaticamente)
+6. Repetir para cada slide
+7. Adicionar imagens via botão no slide (opcional)
+8. Personalizar cores via "Editar cores" (opcional)
+9. Ver "Salvo" no canto (automático após 1 segundo)
+10. Clicar "▶ Play"
+11. Tela muda para modo apresentação fullscreen centralizado
+12. Primeiro slide aparece com cursor piscando (aguardando)
+13. Pressionar Espaço ou Seta → → inicia typewriter
+14. Espaço durante digitação → pula para texto completo
+15. Setas continuam avançando → slides aparecem progressivamente acima
+16. Imagens aparecem no lado direito (se houver)
+17. Mover mouse ou pressionar E → botão "Editar" aparece
+18. Clicar "Editar" → volta ao modo editor completo
+
+───────────────────────────────────────────────────────────────
+
+───────────────────────────────────────────────────────────────
+
+🎨 PERSONALIZAÇÃO DE CORES:
+
+• Clique em "Editar cores" no toolbar
+• Escolha a "Cor Principal" (texto/highlight no editor)
+• Escolha a "Cor Accent" (cursor, botões, destaque)
+• As cores são aplicadas tanto no editor quanto na apresentação
+• Cores são salvas automaticamente no localStorage
+
+───────────────────────────────────────────────────────────────
+
+Boa apresentação! 🎉
+
+Criado com ❤️ usando HTML, CSS e JavaScript puro.
+Editor inline WYSIWYG + Modo Apresentação integrado.
+Inspirado em Notion e editores modernos.

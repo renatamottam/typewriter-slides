@@ -1,0 +1,9 @@
+# MacOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Thumbnails
+Thumbs.db

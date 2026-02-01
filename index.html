@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apresentação Typewriter</title>
+    <style>
+      :root {
+        --color-primary: #142032;
+        --color-accent: #f71963;
+        --color-bg: #ffffff;
+        --color-text-light: #e7e9ee;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        background: var(--color-bg);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-primary);
+        overflow: hidden;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1000px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #text-container {
+        font-size: 2.5rem;
+        line-height: 1.8;
+        width: 100%;
+        text-align: left;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.6s ease;
+      }
+
+      .text-line {
+        margin-top: 2rem;
+        transition: opacity 0.6s ease;
+        width: 100%;
+        padding: 0 60px;
+        opacity: 1;
+      }
+
+      .text-line.completed {
+        color: var(--color-text-light);
+      }
+
+      .text-line.current {
+        opacity: 1;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 4px;
+        height: 2.5rem;
+        background-color: var(--color-accent);
+        margin-left: 7px;
+        animation: blink 0.7s infinite;
+        vertical-align: text-bottom;
+        position: relative;
+        top: -5px;
+      }
+
+      .cursor.inactive {
+        background-color: var(--color-text-light);
+      }
+
+      @keyframes blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* Container para imagem */
+      #image-container {
+        position: fixed;
+        right: 70px;
+        bottom: 52%;
+        transform: translateY(50%);
+        max-width: 570px;
+        opacity: 0;
+        pointer-events: none;
+        transition: none;
+      }
+
+      #image-container.show {
+        opacity: 1;
+      }
+
+      #image-container.animate-first {
+        transition: opacity 0.6s ease;
+      }
+
+      #image-container img {
+        max-width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+      }
+
+      @media (max-width: 768px) {
+        #text-container {
+          font-size: 1.8rem;
+        }
+
+        .cursor {
+          height: 1.8rem;
+        }
+
+        .text-line {
+          padding: 0 20px;
+          margin-top: 2rem;
+        }
+
+        #image-container {
+          right: 20px;
+          max-width: 200px;
+          max-height: 250px;
+        }
+
+        #image-container img {
+          max-height: 250px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="text-container">
+        <!-- As linhas de texto aparecerão aqui -->
+      </div>
+
+      <!-- Container para exibir imagem -->
+      <div id="image-container">
+        <img id="current-image" src="" alt="" />
+      </div>
+    </div>
+
+    <script>
+      // Carregar cores personalizadas
+      function loadColors() {
+        const saved = localStorage.getItem('typewriter-presentation');
+        
+        if (saved) {
+          try {
+            const data = JSON.parse(saved);
+            if (data.colors) {
+              document.documentElement.style.setProperty('--color-primary', data.colors.primary);
+              document.documentElement.style.setProperty('--color-accent', data.colors.accent);
+            }
+          } catch (e) {
+            console.error('Erro ao carregar cores:', e);
+          }
+        }
+      }
+
+      // Carregar slides do localStorage (do editor) ou usar exemplo padrão
+      function loadSlides() {
+        const saved = localStorage.getItem('typewriter-presentation');
+        
+        if (saved) {
+          try {
+            const data = JSON.parse(saved);
+            if (data.slides && data.slides.length > 0) {
+              // Converter formato do editor para formato da apresentação
+              return data.slides.map(slide => {
+                if (slide.images && slide.images.length > 0) {
+                  return {
+                    text: slide.text,
+                    images: slide.images
+                  };
+                }
+                return slide.text;
+              });
+            }
+          } catch (e) {
+            console.error('Erro ao carregar slides:', e);
+          }
+        }
+        
+        // Slides de exemplo padrão
+        return [
+          "Design & Code collaboration",
+
+          "O que é git, hein?",
+
+          {
+            text: "git = sistema",
+            image:
+              "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
+          },
+
+          {
+            text: "Github = serviço",
+            image:
+              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+          },
+
+          "Para que usamos?",
+
+          "- Salvar na nuvem",
+          "- Compartilhar & colaborar",
+          "- Revisar",
+
+          {
+            text: "- Versionar",
+            images: [
+              "1.png",
+              "2.png",
+              "3.png",
+              "4.png",
+              "5.png",
+              "6.png",
+              "7.png",
+              "8.png",
+            ],
+          },
+
+          "Quais os comandos básicos?",
+          "- git pull",
+          "- git status",
+          "- git add",
+          "- git commit",
+          "- git push",
+          "- git merge",
+
+          "O Cursor faz tudo isso ✨",
+
+          "E os MCPs?",
+
+          "Beleza, bora testar?",
+        ];
+      }
+      
+      const slides = loadSlides();
+
+      // Normalizar slides (aceitar string ou objeto)
+      const normalizedSlides = slides.map((slide) => {
+        if (typeof slide === "string") {
+          return { text: slide, images: null };
+        }
+        // Converter image (singular) para images (array)
+        if (slide.image && !slide.images) {
+          return { ...slide, images: [slide.image] };
+        }
+        // Se já tem images, garantir que é array
+        if (slide.images && !Array.isArray(slide.images)) {
+          return { ...slide, images: [slide.images] };
+        }
+        return { ...slide, images: slide.images || null };
+      });
+
+      let currentLineIndex = 0;
+      let maxLineShown = 0;
+      let isTyping = false;
+      let waitingForStart = true;
+      let currentImageIndex = 0; // Índice da imagem atual na sequência
+
+      // VELOCIDADE DE DIGITAÇÃO
+      let typingSpeed = 50;
+      let currentTypingTimeout;
+
+      // Elementos de imagem
+      const imageContainer = document.getElementById("image-container");
+      const currentImage = document.getElementById("current-image");
+
+      const speeds = [
+        { name: "Lenta", value: 100 },
+        { name: "Normal", value: 50 },
+        { name: "Rápida", value: 20 },
+      ];
+      let currentSpeedIndex = 1;
+
+      // Esconder imagem
+      function hideImage() {
+        imageContainer.classList.remove("show");
+        imageContainer.classList.remove("animate-first");
+        currentImageIndex = 0;
+      }
+
+      // Mostrar a imagem atual da sequência
+      function showCurrentImage() {
+        const currentSlide = normalizedSlides[currentLineIndex];
+        if (
+          currentSlide &&
+          currentSlide.images &&
+          currentSlide.images.length > 0
+        ) {
+          if (currentImageIndex < currentSlide.images.length) {
+            // Animação apenas para a primeira imagem
+            if (currentImageIndex === 0) {
+              imageContainer.classList.add("animate-first");
+              currentImage.src = currentSlide.images[currentImageIndex];
+              imageContainer.classList.add("show");
+            } else {
+              // Imagens seguintes: troca instantânea
+              imageContainer.classList.remove("animate-first");
+              currentImage.src = currentSlide.images[currentImageIndex];
+              imageContainer.classList.add("show");
+            }
+            return true;
+          }
+        }
+        return false;
+      }
+
+      // Avançar para próxima imagem da sequência
+      function nextImage() {
+        const currentSlide = normalizedSlides[currentLineIndex];
+        if (
+          currentSlide &&
+          currentSlide.images &&
+          currentSlide.images.length > 0
+        ) {
+          if (currentImageIndex < currentSlide.images.length - 1) {
+            currentImageIndex++;
+            showCurrentImage();
+            return true; // Ainda há mais imagens
+          }
+        }
+        return false; // Não há mais imagens
+      }
+
+      // Verificar se há mais imagens na sequência
+      function hasMoreImages() {
+        const currentSlide = normalizedSlides[currentLineIndex];
+        if (
+          currentSlide &&
+          currentSlide.images &&
+          currentSlide.images.length > 0
+        ) {
+          return currentImageIndex < currentSlide.images.length - 1;
+        }
+        return false;
+      }
+
+      // Inicializar apresentação
+      function init() {
+        const totalSlidesEl = document.getElementById("totalSlides");
+        if (totalSlidesEl) {
+          totalSlidesEl.textContent = normalizedSlides.length;
+        }
+
+        createNewLine();
+        updateNavigationButtons();
+
+        document.addEventListener("keydown", handleKeyPress);
+      }
+
+      // Atualizar foco para uma linha específica
+      function updateFocus() {
+        const container = document.getElementById("text-container");
+        const allLines = container.querySelectorAll(".text-line");
+
+        allLines.forEach((line, index) => {
+          line.classList.remove("current");
+          if (index !== currentLineIndex) {
+            line.classList.add("completed");
+            const cursor = line.querySelector(".cursor");
+            if (cursor) {
+              cursor.remove();
+            }
+          } else {
+            line.classList.remove("completed");
+            if (!line.querySelector(".cursor")) {
+              line.innerHTML += '<span class="cursor inactive"></span>';
+            }
+          }
+        });
+
+        const currentLine = document.getElementById(`line-${currentLineIndex}`);
+        if (currentLine) {
+          currentLine.classList.add("current");
+        }
+
+        waitingForStart = false;
+        isTyping = false;
+
+        setTimeout(() => {
+          adjustContainerPosition();
+        }, 100);
+
+        const currentSlideEl = document.getElementById("currentSlide");
+        if (currentSlideEl) {
+          currentSlideEl.textContent = currentLineIndex + 1;
+        }
+
+        updateNavigationButtons();
+
+        // Mostrar primeira imagem quando navegar para frase já digitada
+        currentImageIndex = 0;
+        showCurrentImage();
+      }
+
+      // Criar nova linha
+      function createNewLine() {
+        if (currentLineIndex >= normalizedSlides.length) {
+          return;
+        }
+
+        const container = document.getElementById("text-container");
+
+        const allLines = container.querySelectorAll(".text-line");
+        allLines.forEach((line, index) => {
+          line.classList.remove("current");
+          line.classList.add("completed");
+
+          const cursor = line.querySelector(".cursor");
+          if (cursor) {
+            cursor.remove();
+          }
+        });
+
+        const lineDiv = document.createElement("div");
+        lineDiv.className = "text-line current";
+        lineDiv.id = `line-${currentLineIndex}`;
+        lineDiv.innerHTML = '<span class="cursor"></span>';
+        container.appendChild(lineDiv);
+
+        if (currentLineIndex > maxLineShown) {
+          maxLineShown = currentLineIndex;
+        }
+
+        setTimeout(() => {
+          adjustContainerPosition();
+        }, 100);
+
+        waitingForStart = true;
+        isTyping = false;
+
+        // Esconder imagem ao criar nova linha
+        hideImage();
+
+        const currentSlideEl = document.getElementById("currentSlide");
+        if (currentSlideEl) {
+          currentSlideEl.textContent = currentLineIndex + 1;
+        }
+
+        updateNavigationButtons();
+      }
+
+      // Ajustar posição - nova abordagem usando margin-top
+      function adjustContainerPosition() {
+        const container = document.getElementById("text-container");
+        const currentLine = document.getElementById(`line-${currentLineIndex}`);
+
+        if (!currentLine) return;
+
+        // Remover margin-top de todas as linhas
+        const allLines = container.querySelectorAll(".text-line");
+        allLines.forEach((line) => {
+          line.style.marginTop = "0";
+        });
+
+        // Calcular o offset necessário
+        let offset = 0;
+        for (let i = 0; i < currentLineIndex; i++) {
+          const line = document.getElementById(`line-${i}`);
+          if (line) {
+            offset += line.offsetHeight;
+            const style = window.getComputedStyle(line);
+            offset += parseFloat(style.marginBottom) || 0;
+          }
+        }
+
+        // Adicionar metade da altura da linha atual
+        offset += currentLine.offsetHeight / 2;
+
+        // Aplicar margin-top negativo na primeira linha para deslocar tudo
+        const firstLine = container.querySelector(".text-line");
+        if (firstLine) {
+          firstLine.style.marginTop = `-${offset}px`;
+        }
+      }
+
+      // Efeito de máquina de escrever
+      function typeWriter(text, elementId, charIndex = 0) {
+        if (charIndex === 0) {
+          isTyping = true;
+          document.getElementById(elementId).innerHTML = "";
+        }
+
+        if (charIndex < text.length) {
+          const currentText = text.substring(0, charIndex + 1);
+          document.getElementById(elementId).innerHTML =
+            currentText.replace(/\n/g, "<br>") + '<span class="cursor"></span>';
+
+          currentTypingTimeout = setTimeout(() => {
+            typeWriter(text, elementId, charIndex + 1);
+          }, typingSpeed);
+        } else {
+          isTyping = false;
+          waitingForStart = false;
+          document.getElementById(elementId).innerHTML =
+            text.replace(/\n/g, "<br>") +
+            '<span class="cursor inactive"></span>';
+
+          document.getElementById(elementId).classList.remove("current");
+
+          // Reajustar posição após o texto completo ser renderizado
+          setTimeout(() => {
+            adjustContainerPosition();
+          }, 100);
+
+          // Mostrar primeira imagem da sequência (se houver)
+          currentImageIndex = 0;
+          showCurrentImage();
+        }
+      }
+
+      // Iniciar digitação
+      function startTyping() {
+        if (
+          waitingForStart &&
+          !isTyping &&
+          currentLineIndex < normalizedSlides.length
+        ) {
+          waitingForStart = false;
+          typeWriter(
+            normalizedSlides[currentLineIndex].text,
+            `line-${currentLineIndex}`,
+          );
+        }
+      }
+
+      // Atualizar botões
+      function updateNavigationButtons() {
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        if (prevBtn) {
+          prevBtn.disabled = currentLineIndex === 0 || isTyping;
+        }
+
+        if (nextBtn) {
+          nextBtn.disabled =
+            currentLineIndex >= normalizedSlides.length - 1 &&
+            !waitingForStart &&
+            !isTyping;
+        }
+      }
+
+      // Avançar
+      function nextSlide() {
+        if (waitingForStart) {
+          startTyping();
+        } else if (!isTyping) {
+          // Verificar se há mais imagens na sequência atual
+          if (hasMoreImages()) {
+            nextImage();
+            return;
+          }
+
+          // Se não há mais imagens, avançar para próximo slide
+          const nextLineExists = document.getElementById(
+            `line-${currentLineIndex + 1}`,
+          );
+
+          if (nextLineExists) {
+            currentLineIndex++;
+            updateFocus();
+          } else if (currentLineIndex < normalizedSlides.length - 1) {
+            currentLineIndex++;
+            setTimeout(() => {
+              createNewLine();
+            }, 100);
+          }
+        }
+      }
+
+      // Voltar
+      function previousSlide() {
+        if (currentLineIndex === 0) {
+          return;
+        }
+
+        if (isTyping) {
+          return;
+        }
+
+        if (waitingForStart) {
+          const currentLine = document.getElementById(
+            `line-${currentLineIndex}`,
+          );
+          if (currentLine) {
+            currentLine.remove();
+          }
+          if (currentLineIndex === maxLineShown) {
+            maxLineShown = Math.max(0, maxLineShown - 1);
+          }
+        }
+
+        currentLineIndex--;
+        updateFocus();
+      }
+
+      // Pular animação
+      function skipAnimation() {
+        if (isTyping && currentLineIndex < normalizedSlides.length) {
+          clearTimeout(currentTypingTimeout);
+          const textElement = document.getElementById(
+            `line-${currentLineIndex}`,
+          );
+
+          textElement.innerHTML =
+            normalizedSlides[currentLineIndex].text.replace(/\n/g, "<br>") +
+            '<span class="cursor inactive"></span>';
+          textElement.classList.remove("current");
+
+          isTyping = false;
+          waitingForStart = false;
+        }
+      }
+
+      // Alternar velocidade
+      function toggleSpeed() {
+        currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
+        typingSpeed = speeds[currentSpeedIndex].value;
+        const speedLabel = document.getElementById("speedLabel");
+        if (speedLabel) {
+          speedLabel.textContent = speeds[currentSpeedIndex].name;
+        }
+      }
+
+      // Navegação por teclado
+      function handleKeyPress(e) {
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+          e.preventDefault();
+          nextSlide();
+        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+          e.preventDefault();
+          previousSlide();
+        } else if (e.key === " ") {
+          e.preventDefault();
+          if (waitingForStart) {
+            startTyping();
+          } else {
+            skipAnimation();
+          }
+        }
+      }
+
+      // Inicializar
+      window.onload = function() {
+        loadColors();
+        init();
+      };
+    </script>
+  </body>
+</html>
