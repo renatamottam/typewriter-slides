@@ -1,40 +1,40 @@
-# 📝 Apresentação Typewriter - Editor Visual + Apresentação
+# Typewriter Slides - Editor Visual + Apresentação
 
 Uma ferramenta completa para criar apresentações minimalistas com efeito de máquina de escrever. Edição visual intuitiva e apresentação fullscreen com animação typewriter.
 
 ![Version](https://img.shields.io/badge/version-2.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-## ✨ Características Principais
+## Características Principais
 
-### 🎨 Editor Visual (WYSIWYG)
-- ✏️ **Edição inline** - Clique e edite diretamente nos slides
-- 📝 **Slides verticais** - Todos visíveis e editáveis
-- ➕ **Enter cria novo slide** automaticamente
-- 🗑️ **Auto-delete** de slides vazios (0.8s)
-- 🖼️ **Suporte a imagens** - Upload ou URL
-- 🎨 **Customização de cores** - Texto principal e cor de destaque
-- 💾 **Auto-save** automático no localStorage
-- 📊 **Numeração automática** dos slides
+### Editor Visual (WYSIWYG)
+- **Edição inline** - Clique e edite diretamente nos slides
+- **Slides verticais** - Todos visíveis e editáveis
+- **Enter cria novo slide** automaticamente
+- **Auto-delete** de slides vazios (0.8s)
+- **Suporte a imagens** - Upload ou URL
+- **Customização de cores** - Texto principal e cor de destaque
+- **Auto-save** automático no localStorage
+- **Numeração automática** dos slides
 
-### 🎬 Modo Apresentação Fullscreen
-- ⌨️ **Efeito typewriter** letra por letra
-- 💫 **Cursor piscando** animado
-- 📍 **Slides progressivos** - Aparecem conforme você avança
-- 👻 **Slides anteriores** ficam visíveis em cor mais clara
-- 🖼️ **Imagens laterais** fixas durante apresentação
-- 🎯 **Slide atual** sempre centralizado
-- ⚡ **Controles rápidos** - Espaço pula animação, R reinicia
-- 🔒 **Botão Editar discreto** - Aparece só com movimento amplo do mouse
+### Modo Apresentação Fullscreen
+- **Efeito typewriter** letra por letra
+- **Cursor piscando** animado
+- **Slides progressivos** - Aparecem conforme você avança
+- **Slides anteriores** ficam visíveis em cor mais clara
+- **Imagens laterais** fixas durante apresentação
+- **Slide atual** sempre centralizado
+- **Controles rápidos** - Espaço pula animação, R reinicia
+- **Botão Editar discreto** - Aparece só com movimento amplo do mouse
 
-## 🚀 Como Usar
+## Como Usar
 
 ### Início Rápido
 
 1. **Abra `editor.html`** no seu navegador
 2. **Edite os slides** clicando no texto (fica rosa)
 3. **Pressione Enter** para criar novos slides
-4. **Clique "▶ Play"** para ver a apresentação
+4. **Clique "Play"** para ver a apresentação
 5. **Pressione E** ou mova o mouse para voltar ao editor
 
 ### Editando Slides
@@ -44,7 +44,7 @@ Uma ferramenta completa para criar apresentações minimalistas com efeito de m�
 - **Enter** → Cria novo slide abaixo
 - **Apagar tudo** → Slide é deletado automaticamente (0.8s)
 - **Backspace em vazio** → Deleta o slide também
-- **Adicionar imagem** → Clique no botão 🖼️ em cada slide
+- **Adicionar imagem** → Clique no botão em cada slide
 
 ### Navegação na Apresentação
 
@@ -63,7 +63,7 @@ Uma ferramenta completa para criar apresentações minimalistas com efeito de m�
 3. Escolha a **cor de destaque** (cursor, botões)
 4. As cores são salvas automaticamente
 
-## 🎨 Funcionalidades Detalhadas
+## Funcionalidades Detalhadas
 
 ### Editor Visual
 
@@ -96,10 +96,10 @@ Recursos da Apresentação:
 ✓ Navegação bidirecional
 ```
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
-apresentacao-typewriter/
+typewriter-slides/
 ├── editor.html          # Editor visual + Apresentação (arquivo principal)
 ├── index.html           # Apresentação standalone (compatibilidade)
 ├── COMO-USAR.txt        # Manual detalhado em português
@@ -107,14 +107,14 @@ apresentacao-typewriter/
 └── *.png               # Imagens de exemplo
 ```
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 - **HTML5** - Estrutura e contentEditable
 - **CSS3** - Animações, transições, variáveis CSS
 - **JavaScript Vanilla** - Sem frameworks ou dependências
 - **localStorage** - Persistência de dados
 
-## 💾 Armazenamento
+## Armazenamento
 
 O projeto salva automaticamente no **localStorage** do navegador:
 
@@ -134,39 +134,39 @@ O projeto salva automaticamente no **localStorage** do navegador:
 - Cada navegador tem seu próprio localStorage
 - Dados persistem entre sessões
 
-## 🎯 Casos de Uso
+## Casos de Uso
 
-- 📊 **Apresentações corporativas** minimalistas
-- 🎓 **Aulas e tutoriais** passo a passo
-- 🎬 **Slides para vídeos** com timing controlado
-- 💼 **Portfolios interativos** com storytelling
-- 📝 **Documentação técnica** apresentável
-- 🎨 **Apresentações criativas** com efeito retrô
+- **Apresentações corporativas** minimalistas
+- **Aulas e tutoriais** passo a passo
+- **Slides para vídeos** com timing controlado
+- **Portfolios interativos** com storytelling
+- **Documentação técnica** apresentável
+- **Apresentações criativas** com efeito retrô
 
-## 🌟 Diferenciais
+## Diferenciais
 
-- ✅ **Zero dependências** - Apenas HTML, CSS e JS
-- ✅ **Offline-first** - Funciona sem internet
-- ✅ **Leve e rápido** - ~60KB total
-- ✅ **Fácil de usar** - Interface intuitiva
-- ✅ **Totalmente customizável** - Cores, conteúdo, imagens
-- ✅ **Open Source** - Código aberto e gratuito
+- **Zero dependências** - Apenas HTML, CSS e JS
+- **Offline-first** - Funciona sem internet
+- **Leve e rápido** - ~60KB total
+- **Fácil de usar** - Interface intuitiva
+- **Totalmente customizável** - Cores, conteúdo, imagens
+- **Open Source** - Código aberto e gratuito
 
-## 📱 Responsividade
+## Responsividade
 
 O projeto é **totalmente responsivo**:
 - Desktop: Experiência completa
 - Tablet: Ajustes de layout e fonte
 - Mobile: Otimizado para tela pequena
 
-## 🔒 Privacidade
+## Privacidade
 
-- ✅ **Dados locais** - Tudo fica no seu navegador
-- ✅ **Sem tracking** - Zero analytics ou cookies
-- ✅ **Sem servidor** - Não envia dados para nenhum lugar
-- ✅ **100% offline** - Funciona sem conexão
+- **Dados locais** - Tudo fica no seu navegador
+- **Sem tracking** - Zero analytics ou cookies
+- **Sem servidor** - Não envia dados para nenhum lugar
+- **100% offline** - Funciona sem conexão
 
-## 🤝 Contribuindo
+## Contribuindo
 
 Contribuições são bem-vindas! Para contribuir:
 
@@ -176,13 +176,13 @@ Contribuições são bem-vindas! Para contribuir:
 4. Push para a branch (`git push origin feature/MinhaFeature`)
 5. Abra um Pull Request
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 👤 Autor
+## Autor
 
-Criado com ❤️ usando HTML, CSS e JavaScript puro.
+Criado com cuidado usando HTML, CSS e JavaScript puro.
 
 ---
 
