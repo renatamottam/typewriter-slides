@@ -6,7 +6,7 @@
     <title>Editor - Apresentação Typewriter</title>
     <style>
       :root {
-        --color-primary: #142032;
+        --color-primary: #212121;
         --color-accent: #f71963;
         --color-bg: #ffffff;
         --color-text-light: #e7e9ee;
@@ -50,7 +50,7 @@
       }
 
       .btn {
-        background: var(--color-primary);
+        background: #212121;
         color: var(--color-bg);
         border: none;
         padding: 10px 20px;
@@ -136,16 +136,11 @@
         display: none;
         min-width: 280px;
         z-index: 1001;
+        color: var(--color-primary);
       }
 
       .settings-panel.show {
         display: block;
-      }
-
-      .settings-title {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
-        color: var(--color-primary);
       }
 
       .settings-option {
@@ -156,7 +151,7 @@
         display: block;
         font-size: 0.85rem;
         margin-bottom: 8px;
-        color: var(--color-primary);
+        color: #212121;
       }
 
       .color-input-wrapper {
@@ -168,7 +163,8 @@
       .color-input-wrapper input[type="color"] {
         width: 50px;
         height: 40px;
-        border: 2px solid var(--color-text-light);
+        border: none;
+        background-color: transparent;
         border-radius: 5px;
         cursor: pointer;
       }
@@ -185,19 +181,20 @@
 
       .color-input-wrapper input[type="text"]:focus {
         outline: none;
-        border-color: var(--color-primary);
+        border-color: #212121;
       }
 
       .settings-actions {
         margin-top: 20px;
         padding-top: 15px;
-        border-top: 1px solid var(--color-text-light);
         display: flex;
         gap: 10px;
       }
 
       .settings-actions button {
         flex: 1;
+        align-items: center;
+        justify-content: center;
         font-size: 0.85rem;
         padding: 8px 16px;
       }
@@ -392,6 +389,7 @@
         border-radius: 10px;
         max-width: 500px;
         width: 90%;
+        color: var(--color-primary);
       }
 
       .modal-title {
@@ -446,7 +444,7 @@
 
       .btn-cancel {
         background: var(--color-text-light);
-        color: var(--color-primary);
+        color: #212121;
       }
 
       .btn-cancel:hover {
@@ -730,16 +728,14 @@
 
     <!-- Settings Panel -->
     <div class="settings-panel" id="settingsPanel">
-      <h3 class="settings-title">Configurações de Cores</h3>
-
       <div class="settings-option">
         <label>Cor Principal (texto/highlight)</label>
         <div class="color-input-wrapper">
-          <input type="color" id="primaryColorPicker" value="#142032" />
+          <input type="color" id="primaryColorPicker" value="#212121" />
           <input
             type="text"
             id="primaryColorText"
-            value="#142032"
+            value="#212121"
             maxlength="7"
             placeholder="#000000"
           />
@@ -840,7 +836,7 @@
       let deleteEmptySlideTimeout = null; // Timeout para deletar slides vazios
       let isCreatingNewSlide = false; // Flag para controlar criação de novo slide
       let colors = {
-        primary: "#142032",
+        primary: "#212121",
         accent: "#f71963",
       };
 
@@ -1251,7 +1247,7 @@
 
         // Verificar se o conteúdo está vazio e deletar automaticamente
         const content = slideElement.textContent.trim();
-        
+
         if (content === "" && slides.length > 1) {
           // Slide vazio e não é o único - deletar após delay (debounce)
           deleteEmptySlideTimeout = setTimeout(() => {
@@ -1286,11 +1282,11 @@
             // Garantir que elemento pode receber foco
             newSlideElement.setAttribute("contentEditable", "true");
             newSlideElement.setAttribute("tabindex", "0");
-            
+
             // Abordagem recursiva - múltiplas tentativas até conseguir
             const focusNewSlide = () => {
               newSlideElement.focus();
-              
+
               if (document.activeElement === newSlideElement) {
                 // Sucesso! Posicionar cursor
                 const range = document.createRange();
@@ -1310,7 +1306,7 @@
                 setTimeout(focusNewSlide, 50);
               }
             };
-            
+
             // Iniciar tentativas após pequeno delay
             setTimeout(focusNewSlide, 0);
           }
