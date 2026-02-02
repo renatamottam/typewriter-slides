@@ -142,11 +142,10 @@ URL externa:
 
 📂 ARQUIVOS:
 
-• editor.html  → Editor + Apresentação unificados (use este!)
-• index.html   → Apresentação standalone (opcional, mantido para compatibilidade)
-• README.md    → Documentação completa
+• index.html    → Editor + Apresentação unificados (tudo em um!)
+• README.md     → Documentação completa
 • COMO-USAR.txt → Este arquivo!
-• *.png        → Imagens de exemplo
+• *.png         → Imagens de exemplo
 
 ───────────────────────────────────────────────────────────────
 
