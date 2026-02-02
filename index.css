@@ -1,0 +1,731 @@
+:root {
+  --color-primary: #212121;
+  --color-accent: #f71963;
+  --color-bg: #ffffff;
+  --color-text-light: #e7e9ee;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  background: var(--color-bg);
+  min-height: 100vh;
+  color: var(--color-primary);
+  overflow-x: hidden;
+}
+
+/* Toolbar */
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ffffffc7;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 40px;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn {
+  background: #212121;
+  color: var(--color-bg);
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-play {
+  background: #212121;
+  font-size: 14px;
+  padding: 8px 20px;
+}
+
+.btn-clear {
+  background: #dc2626;
+  font-size: 14px;
+  padding: 8px 20px;
+}
+
+.btn-clear:hover {
+  background: #b91c1c;
+  opacity: 1;
+}
+
+.btn-settings {
+  padding: 8px 8px;
+  justify-content: center;
+  background: transparent;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #212121;
+}
+
+.btn-settings:hover {
+  background: #f0f0f0;
+  transform: none;
+}
+
+.save-status {
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.save-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.save-status.saved {
+  color: var(--color-primary);
+}
+
+.save-status.saving {
+  color: #999;
+}
+
+.slide-counter {
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  background: #f0f0f0;
+  padding: 8px 16px;
+  border-radius: 5px;
+}
+
+/* Settings Panel */
+.settings-panel {
+  position: absolute;
+  top: 70px;
+  right: 40px;
+  background: var(--color-bg);
+  border: 2px solid var(--color-text-light);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+  min-width: 280px;
+  z-index: 1001;
+  color: var(--color-primary);
+}
+
+.settings-panel.show {
+  display: block;
+}
+
+.settings-option {
+  margin-bottom: 15px;
+}
+
+.settings-option label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  color: #212121;
+}
+
+.color-input-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.color-input-wrapper input[type="color"] {
+  width: 50px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.color-input-wrapper input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  border: 2px solid var(--color-text-light);
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+.color-input-wrapper input[type="text"]:focus {
+  outline: none;
+  border-color: #212121;
+}
+
+.settings-actions {
+  margin-top: 20px;
+  padding-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.settings-actions button {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+}
+
+/* Editor Container */
+.editor-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 100px 0;
+  min-height: 100vh;
+}
+
+/* Slide Wrapper */
+.slide-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.slide-wrapper:hover .slide {
+  background: #f9f9f9;
+}
+
+.slide-wrapper:hover .slide-controls {
+  opacity: 1;
+}
+
+/* Numeração do Slide */
+.slide-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #999;
+  background: #f5f5f5;
+  border-radius: 50%;
+  user-select: none;
+  position: relative;
+  top: 22px;
+}
+
+.slide-wrapper:hover .slide-number {
+  color: #212121;
+}
+
+/* Slide */
+.slide {
+  flex: 1;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  color: #212121;
+  padding: 20px 80px 20px 20px;
+  border-radius: 8px;
+  outline: none;
+  cursor: text;
+  transition: all 0.2s ease;
+  min-height: 80px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  position: relative;
+}
+
+.slide:focus,
+.slide:focus:hover {
+  background: #f1f1f1;
+}
+
+.slide:focus + .slide-controls {
+  opacity: 1;
+}
+
+.slide[contenteditable="true"]:empty:before {
+  content: "Digite seu texto aqui";
+  color: #bbb;
+}
+
+/* Controles do Slide */
+.slide-controls {
+  position: absolute;
+  top: 27px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.slide-wrapper:hover .slide-controls {
+  pointer-events: auto;
+}
+
+.slide-control-btn {
+  background: #1c1c1c15;
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slide-control-btn:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+.slide-control-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #666;
+}
+
+.slide-control-btn:hover svg {
+  fill: var(--color-primary);
+}
+
+/* Image Container */
+.slide-images {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.slide-image {
+  position: relative;
+  max-width: 200px;
+}
+
+.slide-image img {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 2px solid #e7e9ee;
+}
+
+.slide-image-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #212121;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.slide-image-remove:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+/* Modal para adicionar imagem */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  color: #212121;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #212121;
+}
+
+.modal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-option input[type="radio"] {
+  width: 20px;
+  height: 20px;
+}
+
+.modal-option label {
+  font-size: 1rem;
+  cursor: pointer;
+  color: #212121 !important;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  background: var(--color-text-light);
+  color: #212121;
+}
+
+.btn-cancel:hover {
+  background: #d0d2d7;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-state h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 0 20px;
+    height: auto;
+    min-height: 60px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .editor-container {
+    padding: 100px 20px 100px;
+  }
+
+  .slide-wrapper {
+    gap: 10px;
+  }
+
+  .slide-number {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .slide {
+    font-size: 1.8rem;
+    padding: 15px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .btn-play {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .slide-image {
+    max-width: 150px;
+  }
+
+  .slide-image img {
+    max-height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slide {
+    font-size: 1.5rem;
+  }
+
+  .slide-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .slide-counter {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ================================
+    MODO APRESENTAÇÃO (TYPEWRITER FULLSCREEN)
+    ================================ */
+
+.hidden {
+  display: none !important;
+}
+
+/* Container de apresentação */
+.presentation-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-bg);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.presentation-container {
+  width: 90%;
+  max-width: 1000px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#presentation-text-container {
+  font-size: 2.5rem;
+  line-height: 1.1;
+  width: 100%;
+  text-align: left;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.6s ease;
+}
+
+.text-line {
+  margin-bottom: 2rem;
+  transition: opacity 0.6s ease;
+  width: 100%;
+  padding: 0 80px;
+  opacity: 1;
+}
+
+.text-line.completed {
+  color: var(--color-text-light);
+}
+
+.text-line.current {
+  opacity: 1;
+}
+
+.cursor {
+  display: inline-block;
+  width: 4px;
+  height: 2.5rem;
+  background-color: var(--color-accent);
+  margin-left: 7px;
+  animation: blink 0.7s infinite;
+  vertical-align: text-bottom;
+  position: relative;
+  top: -5px;
+}
+
+.cursor.inactive {
+  background-color: var(--color-text-light);
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Container para imagem na apresentação */
+#presentation-image-container {
+  position: fixed;
+  right: 70px;
+  bottom: 52%;
+  transform: translateY(50%);
+  max-width: 570px;
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+
+#presentation-image-container.show {
+  opacity: 1;
+}
+
+#presentation-image-container.animate-first {
+  transition: opacity 0.6s ease;
+}
+
+#presentation-image-container img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+/* Botão Editar */
+.edit-button {
+  position: fixed;
+  top: 15px;
+  right: 40px;
+  background: transparent;
+  color: var(--color-primary);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.edit-button svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.edit-button.visible {
+  opacity: 1;
+}
+
+.edit-button:hover {
+  opacity: 0.8 !important;
+}
+
+/* Responsivo para apresentação */
+@media (max-width: 768px) {
+  #presentation-text-container {
+    font-size: 1.8rem;
+  }
+
+  .cursor {
+    height: 1.8rem;
+  }
+
+  .text-line {
+    padding: 0 20px;
+    margin-top: 2rem;
+  }
+
+  #presentation-image-container {
+    right: 20px;
+    max-width: 200px;
+    max-height: 250px;
+  }
+
+  #presentation-image-container img {
+    max-height: 250px;
+  }
+
+  .edit-button {
+    top: 10px;
+    right: 10px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+}
