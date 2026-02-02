@@ -19,10 +19,8 @@
 • Digite seu conteúdo normalmente
 • Clique fora ou vá para outro slide → texto volta ao PRETO
 • Enter no final do slide → cria novo slide abaixo
-• Apagar todo conteúdo → slide é deletado automaticamente (0.8s)
-• Backspace em slide vazio → deleta o slide também
+• Backspace em slide vazio → deleta o slide
 • Hover sobre slide → mostra botão 🗑️ (deletar)
-• Slide único vazio NÃO pode ser deletado
 
 ───────────────────────────────────────────────────────────────
 
@@ -84,6 +82,8 @@ Remover imagem:
 
 Enter      → Criar novo slide abaixo e mover cursor automaticamente
 Backspace  → Deletar slide vazio (e voltar ao anterior)
+Tab        → Ir para próximo slide
+Shift+Tab  → Voltar para slide anterior
 Click      → Editar slide (texto fica rosa destacado)
 
 ⌨️ ATALHOS NA APRESENTAÇÃO:
@@ -118,7 +118,6 @@ E       → Mostrar/esconder botão "Editar"
 ✓ Imagens aparecem fixas no lado direito durante apresentação
 ✓ Múltiplas imagens por slide (avança com seta)
 ✓ Sempre tenha pelo menos 1 slide (não pode deletar o único)
-✓ Slides vazios são deletados automaticamente após 0.8s
 ✓ Botão "Editar" requer MUITO movimento do mouse (~600px)
 ✓ Botão "Editar" desaparece 0.1s após mouse parar (ultra rápido)
 ✓ Pressione E para mostrar/esconder botão durante apresentação
@@ -196,7 +195,7 @@ R: É normal! Ele aparece automaticamente quando você move o mouse
    esconder.
 
 P: Posso ver todos os slides na apresentação antes de avançar?
-R: Não no modo apresentação. Os slides aparecem progressivamente 
+R: Não no modo apresentação. Os slides aparecem progressivamente
    conforme você avança. Para ver todos, volte ao modo editor clicando
    em "Editar".
 

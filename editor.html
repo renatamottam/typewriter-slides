@@ -1048,6 +1048,7 @@
         const slideDiv = document.createElement("div");
         slideDiv.className = "slide";
         slideDiv.contentEditable = "true";
+        slideDiv.setAttribute("tabindex", "0");
         slideDiv.textContent = text;
 
         // Imagens (dentro do slide, abaixo do texto)
@@ -1287,6 +1288,49 @@
 
       // Keydown no slide
       function handleSlideKeydown(e, wrapper, slideElement) {
+        // Tab: navegar entre slides
+        if (e.key === "Tab") {
+          e.preventDefault();
+
+          const allWrappers = Array.from(document.querySelectorAll(".slide-wrapper"));
+          const currentIndex = allWrappers.indexOf(wrapper);
+
+          if (e.shiftKey) {
+            // Shift+Tab: voltar para slide anterior
+            if (currentIndex > 0) {
+              const prevWrapper = allWrappers[currentIndex - 1];
+              const prevSlide = prevWrapper.querySelector(".slide");
+              if (prevSlide) {
+                prevSlide.focus();
+                // Posicionar cursor no final
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(prevSlide);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+              }
+            }
+          } else {
+            // Tab: avançar para próximo slide
+            if (currentIndex < allWrappers.length - 1) {
+              const nextWrapper = allWrappers[currentIndex + 1];
+              const nextSlide = nextWrapper.querySelector(".slide");
+              if (nextSlide) {
+                nextSlide.focus();
+                // Posicionar cursor no início
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(nextSlide);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+              }
+            }
+          }
+          return;
+        }
+
         // Enter: criar novo slide
         if (e.key === "Enter") {
           e.preventDefault();
