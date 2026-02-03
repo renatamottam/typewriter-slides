@@ -188,6 +188,38 @@ body {
   border-color: #212121;
 }
 
+.settings-select {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  border: 2px solid var(--color-text-light);
+  border-radius: 5px;
+  background: white;
+  color: #212121;
+  cursor: pointer;
+}
+
+.settings-select:focus {
+  outline: none;
+  border-color: #212121;
+}
+
+.settings-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  border: 2px solid var(--color-text-light);
+  border-radius: 5px;
+  color: #212121;
+}
+
+.settings-input:focus {
+  outline: none;
+  border-color: #212121;
+}
+
 .settings-actions {
   margin-top: 20px;
   padding-top: 15px;
