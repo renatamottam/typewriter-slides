@@ -9,17 +9,24 @@
   <body>
     <!-- Toolbar -->
     <div class="toolbar">
-      <button class="btn btn-settings" id="settingsBtn" title="Configurações">
-        Configurar
-      </button>
-      <button
-        class="btn btn-clear"
-        id="clearAllBtn"
-        title="Deletar todos os slides"
-      >
-        Limpar tudo
-      </button>
-      <button class="btn btn-play" id="playBtn">Play</button>
+      <div class="toolbar-left">
+        <div class="save-status" id="saveStatus">
+          <span id="saveText">Salvo</span>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-settings" id="settingsBtn" title="Configurações">
+          Configurar
+        </button>
+        <button
+          class="btn btn-clear"
+          id="clearAllBtn"
+          title="Deletar todos os slides"
+        >
+          Limpar tudo
+        </button>
+        <button class="btn btn-play" id="playBtn">Play</button>
+      </div>
     </div>
 
     <!-- Settings Panel -->
@@ -173,7 +180,7 @@
       let slides = [];
       let currentFocusedSlide = null;
       let saveTimeout = null;
-      let deleteEmptySlideTimeout = null; // Timeout para deletar slides vazios
+      let deleteTimeouts = {}; // Timeouts para deletar slides vazios (por ID)
       let isCreatingNewSlide = false; // Flag para controlar criação de novo slide
       let colors = {
         primary: "#212121",
@@ -251,9 +258,9 @@
             [],
           );
           addSlide("Clique em 'Play' para ver esta apresentação em ação", []);
-          addSlide("Use Tab para navegar entre slides", []);
-          addSlide("Pressione Enter para criar um novo slide", []);
-          addSlide("Delete todo o texto para remover um slide", []);
+          addSlide("Pressione Enter ou Tab para criar um novo slide", []);
+          addSlide("Use Shift+Enter para quebrar linha no mesmo slide", []);
+          addSlide("Slides vazios são deletados automaticamente após 0.5s", []);
           addSlide("Você pode adicionar imagens clicando no ícone ao lado", []);
           addSlide("Personalize as cores no botão de configurações", []);
           addSlide("Seus slides são salvos automaticamente no navegador", []);
@@ -421,7 +428,9 @@
         slideDiv.className = "slide";
         slideDiv.contentEditable = "true";
         slideDiv.setAttribute("tabindex", "0");
-        slideDiv.textContent = text;
+        
+        // Converter quebras de linha (\n) em <br> para exibição
+        slideDiv.innerHTML = text.replace(/\n/g, "<br>");
 
         // Imagens (dentro do slide, abaixo do texto)
         if (images && images.length > 0) {
@@ -552,6 +561,13 @@
 
         const wrapper = document.querySelector(`[data-id="${id}"]`);
         if (wrapper) {
+          // Limpar timeout e classe antes de remover
+          if (deleteTimeouts[id]) {
+            clearTimeout(deleteTimeouts[id]);
+            delete deleteTimeouts[id];
+          }
+          wrapper.classList.remove("deleting-soon");
+
           const nextWrapper = wrapper.nextElementSibling;
           const prevWrapper = wrapper.previousElementSibling;
 
@@ -633,6 +649,21 @@
         if (imagesContainer) {
           imagesContainer.remove();
         }
+        
+        // Converter <br> e <div> em quebras de linha antes de pegar o texto
+        const brs = clone.querySelectorAll("br");
+        brs.forEach((br) => {
+          br.replaceWith("\n");
+        });
+        
+        // Tratar divs que o contentEditable cria
+        const divs = clone.querySelectorAll("div");
+        divs.forEach((div, index) => {
+          if (index > 0) {
+            div.insertAdjacentText("beforebegin", "\n");
+          }
+        });
+        
         return clone.textContent.trim();
       }
 
@@ -640,6 +671,14 @@
       function handleSlideFocus(wrapper, slideElement) {
         // Não fazer nada se estamos criando um novo slide
         if (isCreatingNewSlide) return;
+
+        // Cancelar deleção pendente ao focar
+        const id = wrapper.dataset.id;
+        if (deleteTimeouts[id]) {
+          clearTimeout(deleteTimeouts[id]);
+          delete deleteTimeouts[id];
+        }
+        wrapper.classList.remove("deleting-soon");
 
         currentFocusedSlide = wrapper;
         const index = Array.from(editorContainer.children).indexOf(wrapper);
@@ -659,6 +698,18 @@
         if (slideIndex !== -1) {
           slides[slideIndex].text = getSlideText(slideElement);
         }
+
+        // Se o slide ficou vazio após perder o foco, agendar deleção
+        const content = getSlideText(slideElement);
+        if (content === "" && slides.length > 1) {
+          wrapper.classList.add("deleting-soon");
+          deleteTimeouts[id] = setTimeout(() => {
+            if (getSlideText(slideElement) === "" && slides.length > 1) {
+              deleteSlide(id);
+            }
+          }, 500);
+        }
+
         scheduleAutoSave();
       }
 
@@ -667,21 +718,37 @@
         // Não fazer nada se estamos criando um novo slide
         if (isCreatingNewSlide) return;
 
-        // Limpar timeout anterior
-        clearTimeout(deleteEmptySlideTimeout);
+        const id = wrapper.dataset.id;
+
+        // Atualizar conteúdo do slide no array ANTES de salvar
+        const slideIndex = slides.findIndex((s) => s.id === id);
+        if (slideIndex !== -1) {
+          slides[slideIndex].text = getSlideText(slideElement);
+        }
+
+        // Limpar timeout anterior deste slide
+        if (deleteTimeouts[id]) {
+          clearTimeout(deleteTimeouts[id]);
+          delete deleteTimeouts[id];
+        }
+
+        // Remover indicador visual de deleção pendente
+        wrapper.classList.remove("deleting-soon");
 
         // Verificar se o conteúdo está vazio e deletar automaticamente
         const content = getSlideText(slideElement);
 
         if (content === "" && slides.length > 1) {
+          // Adicionar classe visual indicando que será deletado
+          wrapper.classList.add("deleting-soon");
+
           // Slide vazio e não é o único - deletar após delay (debounce)
-          deleteEmptySlideTimeout = setTimeout(() => {
+          deleteTimeouts[id] = setTimeout(() => {
             // Verificar novamente se ainda está vazio
             if (getSlideText(slideElement) === "" && slides.length > 1) {
-              const id = wrapper.dataset.id;
               deleteSlide(id);
             }
-          }, 800); // Delay de 800ms para dar tempo do usuário colar texto ou continuar digitando
+          }, 500); // Delay de 0.5s para dar tempo do usuário digitar ou colar texto
         }
 
         scheduleAutoSave();
@@ -689,53 +756,65 @@
 
       // Keydown no slide
       function handleSlideKeydown(e, wrapper, slideElement) {
-        // Tab: navegar entre slides
+        // Tab: criar novo slide (mesmo comportamento do Enter)
         if (e.key === "Tab") {
           e.preventDefault();
 
-          const allWrappers = Array.from(
-            document.querySelectorAll(".slide-wrapper"),
-          );
-          const currentIndex = allWrappers.indexOf(wrapper);
+          const id = wrapper.dataset.id;
+          const slideIndex = slides.findIndex((s) => s.id === id);
 
-          if (e.shiftKey) {
-            // Shift+Tab: voltar para slide anterior
-            if (currentIndex > 0) {
-              const prevWrapper = allWrappers[currentIndex - 1];
-              const prevSlide = prevWrapper.querySelector(".slide");
-              if (prevSlide) {
-                prevSlide.focus();
-                // Posicionar cursor no final
+          // Salvar conteúdo atual
+          slides[slideIndex].text = getSlideText(slideElement);
+
+          // Criar novo slide
+          const newWrapper = addSlide("", [], slideIndex + 1);
+          const newSlideElement = newWrapper.querySelector(".slide");
+
+          if (newSlideElement) {
+            // Garantir que elemento pode receber foco
+            newSlideElement.setAttribute("contentEditable", "true");
+            newSlideElement.setAttribute("tabindex", "0");
+
+            // Abordagem recursiva - múltiplas tentativas até conseguir
+            const focusNewSlide = () => {
+              newSlideElement.focus();
+
+              if (document.activeElement === newSlideElement) {
+                // Sucesso! Posicionar cursor
                 const range = document.createRange();
                 const sel = window.getSelection();
-                range.selectNodeContents(prevSlide);
-                range.collapse(false);
-                sel.removeAllRanges();
-                sel.addRange(range);
-              }
-            }
-          } else {
-            // Tab: avançar para próximo slide
-            if (currentIndex < allWrappers.length - 1) {
-              const nextWrapper = allWrappers[currentIndex + 1];
-              const nextSlide = nextWrapper.querySelector(".slide");
-              if (nextSlide) {
-                nextSlide.focus();
-                // Posicionar cursor no início
-                const range = document.createRange();
-                const sel = window.getSelection();
-                range.selectNodeContents(nextSlide);
+                range.selectNodeContents(newSlideElement);
                 range.collapse(true);
                 sel.removeAllRanges();
                 sel.addRange(range);
+
+                // Scroll suave
+                newWrapper.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+              } else {
+                // Falhou, tentar novamente
+                setTimeout(focusNewSlide, 50);
               }
-            }
+            };
+
+            // Iniciar tentativas após pequeno delay
+            setTimeout(focusNewSlide, 0);
           }
           return;
         }
 
-        // Enter: criar novo slide
+        // Enter: criar novo slide ou quebrar linha (com Shift)
         if (e.key === "Enter") {
+          if (e.shiftKey) {
+            // Shift+Enter: quebrar linha dentro do mesmo slide
+            e.preventDefault();
+            document.execCommand("insertLineBreak");
+            return;
+          }
+
+          // Enter sozinho: criar novo slide
           e.preventDefault();
 
           const id = wrapper.dataset.id;
@@ -972,7 +1051,7 @@
           if (saveText) {
             saveText.textContent = "Salvo";
           }
-        }, 1000);
+        }, 300); // Delay de 300ms para salvamento mais responsivo
       }
 
       // Salvar no localStorage
