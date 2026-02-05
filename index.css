@@ -117,7 +117,7 @@ body {
 }
 
 .save-status.saved {
-  color: var(--color-primary);
+  color: #212121;
 }
 
 .save-status.saving {
