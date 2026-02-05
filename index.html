@@ -134,7 +134,7 @@
     <!-- Modal de Adicionar Imagem -->
     <div class="modal" id="imageModal">
       <div class="modal-content">
-        <h2 class="modal-title">Adicionar Imagem</h2>
+        <h2 class="modal-title">Adicionar Imagens</h2>
 
         <div class="modal-options">
           <div class="modal-option">
@@ -145,7 +145,7 @@
               value="upload"
               checked
             />
-            <label for="uploadOption">Upload de arquivo</label>
+            <label for="uploadOption">Upload de arquivos (múltiplos)</label>
           </div>
           <div class="modal-option">
             <input type="radio" id="urlOption" name="imageOption" value="url" />
@@ -157,6 +157,7 @@
           type="file"
           id="imageUpload"
           accept="image/*"
+          multiple
           class="modal-input"
           style="display: block"
         />
@@ -261,7 +262,10 @@
           addSlide("Pressione Enter ou Tab para criar um novo slide", []);
           addSlide("Use Shift+Enter para quebrar linha no mesmo slide", []);
           addSlide("Slides vazios são deletados automaticamente após 0.5s", []);
-          addSlide("Você pode adicionar imagens clicando no ícone ao lado", []);
+          addSlide(
+            "Você pode adicionar múltiplas imagens clicando no ícone ao lado",
+            [],
+          );
           addSlide("Personalize as cores no botão de configurações", []);
           addSlide("Seus slides são salvos automaticamente no navegador", []);
 
@@ -454,7 +458,7 @@
         imageBtn.className = "slide-control-btn";
         imageBtn.innerHTML =
           '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>';
-        imageBtn.title = "Adicionar imagem";
+        imageBtn.title = "Adicionar imagens";
         imageBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           openImageModal(wrapper);
@@ -919,39 +923,50 @@
         if (slideIndex === -1) return;
 
         if (uploadOption.checked) {
-          // Upload de arquivo
-          const file = imageUpload.files[0];
-          if (!file) {
-            alert("Selecione um arquivo!");
+          // Upload de arquivo(s)
+          const files = imageUpload.files;
+          if (!files || files.length === 0) {
+            alert("Selecione pelo menos um arquivo!");
             return;
           }
 
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            const imgSrc = e.target.result;
-            slides[slideIndex].images.push(imgSrc);
+          // Preparar container de imagens
+          const slideDiv = currentFocusedSlide.querySelector(".slide");
+          let imagesContainer = slideDiv.querySelector(".slide-images");
+          if (!imagesContainer) {
+            imagesContainer = document.createElement("div");
+            imagesContainer.className = "slide-images";
+            imagesContainer.contentEditable = "false";
+            slideDiv.appendChild(imagesContainer);
+          }
 
-            // Adicionar imagem ao DOM (dentro do slide)
-            const slideDiv = currentFocusedSlide.querySelector(".slide");
-            let imagesContainer = slideDiv.querySelector(".slide-images");
-            if (!imagesContainer) {
-              imagesContainer = document.createElement("div");
-              imagesContainer.className = "slide-images";
-              imagesContainer.contentEditable = "false";
-              slideDiv.appendChild(imagesContainer);
-            }
+          let filesProcessed = 0;
+          const totalFiles = files.length;
 
-            const imgWrapper = createImageElement(
-              imgSrc,
-              id,
-              slides[slideIndex].images.length - 1,
-            );
-            imagesContainer.appendChild(imgWrapper);
+          // Processar cada arquivo
+          Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const imgSrc = e.target.result;
+              slides[slideIndex].images.push(imgSrc);
 
-            closeImageModal();
-            scheduleAutoSave();
-          };
-          reader.readAsDataURL(file);
+              const imgWrapper = createImageElement(
+                imgSrc,
+                id,
+                slides[slideIndex].images.length - 1,
+              );
+              imagesContainer.appendChild(imgWrapper);
+
+              filesProcessed++;
+
+              // Fechar modal e salvar apenas quando todos os arquivos forem processados
+              if (filesProcessed === totalFiles) {
+                closeImageModal();
+                scheduleAutoSave();
+              }
+            };
+            reader.readAsDataURL(file);
+          });
         } else {
           // URL externa
           const url = imageUrl.value.trim();
